@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZombieParty.Models
 {
@@ -22,10 +22,10 @@ namespace ZombieParty.Models
         [Display(Name = "Zombie Type")]
         [ForeignKey("ZombieType")]
         public int ZombieTypeId { get; set; }
-        [ValidateNever] 
-        public ZombieType? ZombieType { get; set; }
+        [ValidateNever]
+        public virtual ZombieType? ZombieType { get; set; }
 
-        [ValidateNever] 
-        public List<HuntingLog> HuntingLogs { get; set; }
+        [ValidateNever]
+        public virtual List<HuntingLog> HuntingLogs { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ZombieParty.Models;
 using ZombieParty.Models.Data;
-using ZombieParty.ViewModels;
 
 namespace ZombieParty.Controllers
 {
@@ -20,20 +19,36 @@ namespace ZombieParty.Controllers
             return View(weapons);
         }
 
-        public IActionResult Create()
+        public IActionResult Upsert(int? id)
         {
-            return View();
+            if (id == null || id == 0)
+                // create
+                return View(new Weapon()); // Envoie un objet vide, car la vue attend un objet Weapon
+            else
+                //update
+                return View(_baseDonnees.Weapons.Find(id));
+
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
-        public IActionResult Create(Weapon weapon)
+        public IActionResult Upsert(Weapon weapon)
         {
             if (ModelState.IsValid)
             {
-                // Ajouter à la BD
-                _baseDonnees.Weapons.Add(weapon);
-                TempData["Success"] = $"{weapon.Name} weapon added";
-
+                // Create
+                if (weapon.WeaponId == 0)
+                {
+                    // Ajouter à la BD
+                    _baseDonnees.Weapons.Add(weapon);
+                    TempData["Success"] = $"{weapon.Name} weapon added";
+                }
+                else
+                {
+                    // Update
+                    _baseDonnees.Weapons.Update(weapon);
+                    TempData["success"] = $"{weapon.Name} weapon updated";
+                }
                 _baseDonnees.SaveChanges();
 
                 return this.RedirectToAction("Index");
@@ -41,5 +56,6 @@ namespace ZombieParty.Controllers
 
             return this.View(weapon);
         }
+
     }
 }

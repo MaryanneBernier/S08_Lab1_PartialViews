@@ -27,5 +27,7 @@ namespace ZombieParty.Models
 
         [ValidateNever]
         public virtual List<HuntingLog> HuntingLogs { get; set; }
+
+        public int Force { get; set; }
     }
 }
